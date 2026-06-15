@@ -1,21 +1,21 @@
 import { useReducer, useEffect, useCallback } from 'react'
 
 // ---------------------------------------------------------------------------
-// useDraw — จัดการ draw state ของทั้ง 3 โหมด (PRD §1.2)
-//   - whiteBalls ถูกสุ่ม "ครบในครั้งเดียว" ตอนกด Draw แต่ค่อย ๆ reveal ทีละลูก
-//   - reveal cadence = 1000ms ต่อลูก (timer อยู่ใน hook นี้)
+// useDraw — จัดการ draw state ของทั้ง 3 โหมด
+//   - DRAW_NEXT_ONE: reveal 1 ลูกทันที (ไม่มี timer)
+//   - START_REMAINING: reveal ลูกที่เหลือทั้งหมด ทยอย 1 วินาทีต่อลูก
 //   - special ball กดได้เฉพาะหลัง white reveal ครบ
-//   - แยก state per-mode เพื่อให้สลับ tab แล้วผลของแต่ละโหมดไม่หาย
+//   - แยก state per-mode เพื่อให้สลับ tab แล้วผลไม่หาย
 // ---------------------------------------------------------------------------
 
-const REVEAL_INTERVAL_MS = 1000 // PRD: เว้น 1 วินาทีต่อลูก
-const FIRST_REVEAL_MS = 350 // ลูกแรกโผล่ไวขึ้นเล็กน้อยให้รู้สึก responsive
+const REVEAL_INTERVAL_MS = 1000
+const FIRST_REVEAL_MS = 350
 
 const emptyMode = () => ({
-  whiteBalls: [], // เลขที่สุ่มได้ครบแล้ว (full)
-  revealedCount: 0, // จำนวนลูกที่ reveal บนจอแล้ว
-  special: null, // เลข special ball (null = ยังไม่จับ)
-  drawingWhite: false, // กำลังทยอย reveal white อยู่หรือไม่
+  whiteBalls: [],
+  revealedCount: 0,
+  special: null,
+  drawingWhite: false,
 })
 
 const initialState = {
@@ -27,16 +27,26 @@ const initialState = {
 function reducer(state, action) {
   const m = state[action.mode]
   switch (action.type) {
-    case 'START_WHITE':
+    case 'DRAW_NEXT_ONE': {
+      if (m.drawingWhite) return state
+      const balls = m.whiteBalls.length > 0 ? m.whiteBalls : action.balls
+      return {
+        ...state,
+        [action.mode]: { ...m, whiteBalls: balls, revealedCount: m.revealedCount + 1 },
+      }
+    }
+    case 'START_REMAINING': {
+      if (m.drawingWhite) return state
+      const balls = m.whiteBalls.length > 0 ? m.whiteBalls : action.balls
       return {
         ...state,
         [action.mode]: {
-          ...emptyMode(),
-          whiteBalls: action.balls,
-          revealedCount: 0,
-          drawingWhite: action.balls.length > 0,
+          ...m,
+          whiteBalls: balls,
+          drawingWhite: balls.length > m.revealedCount,
         },
       }
+    }
     case 'REVEAL_ONE':
       if (!m.drawingWhite) return state
       return {
@@ -58,7 +68,7 @@ export function useDraw(activeMode) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const cur = state[activeMode]
 
-  // timer reveal ทีละลูกสำหรับโหมดที่กำลัง active อยู่
+  // timer reveal ทีละลูกสำหรับ START_REMAINING เท่านั้น
   useEffect(() => {
     if (!cur.drawingWhite) return
     if (cur.revealedCount >= cur.whiteBalls.length) {
@@ -70,8 +80,12 @@ export function useDraw(activeMode) {
     return () => clearTimeout(t)
   }, [activeMode, cur.drawingWhite, cur.revealedCount, cur.whiteBalls.length])
 
-  const startWhiteDraw = useCallback((mode, balls) => {
-    dispatch({ type: 'START_WHITE', mode, balls })
+  const drawNextOne = useCallback((mode, balls) => {
+    dispatch({ type: 'DRAW_NEXT_ONE', mode, balls })
+  }, [])
+
+  const startRemaining = useCallback((mode, balls) => {
+    dispatch({ type: 'START_REMAINING', mode, balls })
   }, [])
 
   const drawSpecialBall = useCallback((mode, ball) => {
@@ -82,5 +96,5 @@ export function useDraw(activeMode) {
     dispatch({ type: 'RESET', mode })
   }, [])
 
-  return { state, startWhiteDraw, drawSpecialBall, reset }
+  return { state, drawNextOne, startRemaining, drawSpecialBall, reset }
 }

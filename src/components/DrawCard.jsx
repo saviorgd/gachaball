@@ -50,14 +50,15 @@ export default function DrawCard({
   revealedCount,
   hasSpecial,
   specialValue,
-  whiteButtonLabel = 'Draw White Ball',
   specialButtonLabel,
-  whiteDisabled,
+  nextDisabled,
+  remainingDisabled,
   specialDisabled,
   showShare,
   showReset,
   sharing,
-  onDrawWhite,
+  onDrawNext,
+  onDrawRemaining,
   onDrawSpecial,
   onReset,
   onShare,
@@ -106,9 +107,16 @@ export default function DrawCard({
         ) : (
           <>
             <ActionButton
-              label={whiteButtonLabel}
-              onClick={onDrawWhite}
-              disabled={whiteDisabled}
+              label="Draw Next Ball"
+              onClick={onDrawNext}
+              disabled={nextDisabled}
+              bg={theme.drawButton}
+              color={theme.drawButtonText}
+            />
+            <ActionButton
+              label="Draw Remaining Ball"
+              onClick={onDrawRemaining}
+              disabled={remainingDisabled}
               bg={theme.drawButton}
               color={theme.drawButtonText}
             />

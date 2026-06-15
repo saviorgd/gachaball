@@ -67,7 +67,7 @@ export default function App() {
   const [popup, setPopup] = useState({ open: false, message: '' })
 
   const exportRef = useRef(null)
-  const { state, startWhiteDraw, drawSpecialBall, reset } = useDraw(activeMode)
+  const { state, drawNextOne, startRemaining, drawSpecialBall, reset } = useDraw(activeMode)
 
   const mode = MODES[activeMode]
   const theme = mode.theme
@@ -98,7 +98,9 @@ export default function App() {
   const displayWhiteCount =
     cur.whiteBalls.length > 0 ? cur.whiteBalls.length : plannedWhiteCount
 
-  const whiteDisabled = cur.drawingWhite || cur.whiteBalls.length > 0
+  const allRevealed = cur.whiteBalls.length > 0 && cur.revealedCount >= cur.whiteBalls.length
+  const nextDisabled = cur.drawingWhite || allRevealed
+  const remainingDisabled = cur.drawingWhite || allRevealed
   const specialDisabled = !whiteComplete || cur.special != null
 
   const allDrawn = hasSpecial ? whiteComplete && cur.special != null : whiteComplete
@@ -106,35 +108,42 @@ export default function App() {
   const showReset = cur.whiteBalls.length > 0 || cur.special != null
 
   // ---- handlers ----
-  function handleDrawWhite() {
-    if (whiteDisabled) return
-
+  // คืน balls array (สร้างใหม่ถ้ายังไม่มี) หรือ null ถ้า custom validation ไม่ผ่าน
+  function resolveWhiteBalls() {
+    if (cur.whiteBalls.length > 0) return cur.whiteBalls
     if (isCustom) {
-      // ตรวจ validation ก่อนจับ (PRD §1.3 — Min > Max ขึ้น pop-up)
       if (!Number.isFinite(custom.min) || !Number.isFinite(custom.max) || !Number.isFinite(custom.count)) {
         setPopup({ open: true, message: 'กรุณากรอก Min, Max และจำนวนลูกให้ครบ' })
-        return
+        return null
       }
       if (custom.min > custom.max) {
         setPopup({ open: true, message: 'Min มากกว่า Max — กรุณาแก้ไขช่วงตัวเลขก่อนจับ' })
-        return
+        return null
       }
       if (custom.count < 1) {
         setPopup({ open: true, message: 'จำนวนลูกต้องอย่างน้อย 1' })
-        return
+        return null
       }
-      const balls =
-        customConfig.repeatMode === 'allow-repeat'
-          ? drawWithRepeat(custom.min, custom.max, custom.count)
-          : drawUnique(custom.min, custom.max, custom.count) // No Repeat: cap ที่ pool โดยอัตโนมัติ
-      startWhiteDraw(activeMode, balls)
-      return
+      return customConfig.repeatMode === 'allow-repeat'
+        ? drawWithRepeat(custom.min, custom.max, custom.count)
+        : drawUnique(custom.min, custom.max, custom.count)
     }
-
-    // Mega / Powerball
     const { min, max, count } = mode.white
-    const balls = drawUnique(min, max, count)
-    startWhiteDraw(activeMode, balls)
+    return drawUnique(min, max, count)
+  }
+
+  function handleDrawNext() {
+    if (nextDisabled) return
+    const balls = resolveWhiteBalls()
+    if (balls === null) return
+    drawNextOne(activeMode, balls)
+  }
+
+  function handleDrawRemaining() {
+    if (remainingDisabled) return
+    const balls = resolveWhiteBalls()
+    if (balls === null) return
+    startRemaining(activeMode, balls)
   }
 
   function handleDrawSpecial() {
@@ -173,13 +182,6 @@ export default function App() {
 
       <ModeSelector active={activeMode} onChange={setActiveMode} />
 
-      {/* Phase 2 Bar — เฉพาะ Mega / Powerball (PRD §2.4) */}
-      {!isCustom && (
-        <div className="mt-4">
-          <Phase2Bar />
-        </div>
-      )}
-
       {/* Custom Config — เหนือ Draw Area Card (PRD §2.6) */}
       {isCustom && (
         <div className="mt-4">
@@ -196,17 +198,26 @@ export default function App() {
           hasSpecial={hasSpecial}
           specialValue={cur.special}
           specialButtonLabel={hasSpecial ? mode.special.buttonLabel : undefined}
-          whiteDisabled={whiteDisabled}
+          nextDisabled={nextDisabled}
+          remainingDisabled={remainingDisabled}
           specialDisabled={specialDisabled}
           showShare={showShare}
           showReset={showReset}
           sharing={sharing}
-          onDrawWhite={handleDrawWhite}
+          onDrawNext={handleDrawNext}
+          onDrawRemaining={handleDrawRemaining}
           onDrawSpecial={handleDrawSpecial}
           onReset={handleReset}
           onShare={handleShare}
         />
       </div>
+
+      {/* Phase 2 Bar — ใต้ Draw Card, เฉพาะ Mega / Powerball */}
+      {!isCustom && (
+        <div className="mt-4">
+          <Phase2Bar />
+        </div>
+      )}
 
       {/* node สำหรับ capture เป็นรูป (อยู่นอกจอ) */}
       <ExportCard

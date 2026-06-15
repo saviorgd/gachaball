@@ -1,17 +1,23 @@
-// ---------------------------------------------------------------------------
-// Phase2Bar (PRD §1.7 + §2.4)
-//   - แสดงเฉพาะ Mega Millions / Powerball
-//   - placeholder skeleton เท่านั้น — ยังไม่ wire data จริง (Phase 2)
-//   - bg #F0F0F0, radius 12px
-//   - jackpot: bold large (skeleton)  |  countdown: monospace DD:HH:MM:SS (skeleton)
-// ---------------------------------------------------------------------------
-
 function Shimmer({ width, height, radius = 6 }) {
   return (
     <div
       style={{ width, height, borderRadius: radius }}
       className="animate-pulse bg-[#DCDCDC]"
     />
+  )
+}
+
+function ComingSoonBlock({ shimmerWidth, shimmerHeight }) {
+  return (
+    <div className="relative">
+      <Shimmer width={shimmerWidth} height={shimmerHeight} />
+      <span
+        className="absolute inset-0 flex items-center justify-center text-xs font-medium"
+        style={{ color: '#9A9A9A' }}
+      >
+        Coming soon
+      </span>
+    </div>
   )
 }
 
@@ -26,15 +32,13 @@ export default function Phase2Bar() {
         <span className="text-[10px] font-medium uppercase tracking-wide text-[#9A9A9A]">
           Estimated jackpot
         </span>
-        {/* jackpot amount: bold, large (skeleton) */}
-        <Shimmer width={120} height={22} />
+        <ComingSoonBlock shimmerWidth={120} shimmerHeight={22} />
       </div>
       <div className="flex flex-col items-end gap-2">
         <span className="text-[10px] font-medium uppercase tracking-wide text-[#9A9A9A]">
           Next draw
         </span>
-        {/* countdown: monospace DD:HH:MM:SS (skeleton) */}
-        <Shimmer width={104} height={16} />
+        <ComingSoonBlock shimmerWidth={104} shimmerHeight={16} />
       </div>
     </div>
   )
