@@ -62,10 +62,11 @@ export const MODE_ORDER = ['megamillions', 'powerball', 'custom']
 // ค่าเริ่มต้นของ Custom (PRD §1.1, §2.6)
 export const CUSTOM_DEFAULTS = {
   min: 0,
-  max: 999999,
-  count: 6, // PRD ระบุ "engineer กำหนด" — เลือก 6 เป็น default ที่สมเหตุสมผล
-  repeatMode: 'no-repeat', // 'no-repeat' (default) | 'allow-repeat'
+  max: 9,
+  count: 6,
+  repeatMode: 'allow-repeat', // 'no-repeat' | 'allow-repeat' (default)
 }
 
 export const INPUT_MAX_LENGTH = 28 // PRD §1.1, §1.3
+export const CUSTOM_MAX_DRAWS = 30
 export const SESSION_TAB_KEY = 'gachaball:last-tab' // PRD §1.4

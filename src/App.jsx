@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
-import { MODES, CUSTOM_DEFAULTS, SESSION_TAB_KEY, MODE_ORDER } from './config/modes'
+import { MODES, CUSTOM_DEFAULTS, SESSION_TAB_KEY, MODE_ORDER, CUSTOM_MAX_DRAWS } from './config/modes'
 import { useDraw } from './hooks/useDraw'
 import { drawUnique, drawWithRepeat, drawSpecial } from './lib/random'
 import { shareOrDownload, formatDateTime } from './lib/share'
@@ -38,7 +38,9 @@ function parseCustom(config) {
     errors.min = 'Min ต้องไม่มากกว่า Max'
   }
   if (Number.isFinite(count) && count < 1) {
-    errors.count = 'อย่างน้อย 1 ลูก'
+    errors.count = 'อย่างน้อย 1'
+  } else if (Number.isFinite(count) && count > CUSTOM_MAX_DRAWS) {
+    errors.count = `ไม่เกิน ${CUSTOM_MAX_DRAWS}`
   }
 
   const rangeSize = Number.isFinite(min) && Number.isFinite(max) ? max - min + 1 : 0
@@ -49,7 +51,7 @@ function parseCustom(config) {
       config.repeatMode === 'allow-repeat' ? count : Math.min(count, rangeSize)
   }
 
-  const valid = allFilled && min <= max && count >= 1 && rangeSize > 0
+  const valid = allFilled && min <= max && count >= 1 && count <= CUSTOM_MAX_DRAWS && rangeSize > 0
   return { min, max, count, rangeSize, errors, valid, plannedCount }
 }
 
