@@ -31,4 +31,4 @@ Repeat mode: pill toggle 2 ตัวเลือก (No Repeat / Allow Repeat)
 ○ Allow Duplicates
 ตัว No Duplicates คือ No Repeat เดิม
 ตัว Allow Duplicates คือ Allow Repeat เดิม
-ซึ่งค่าเริ่มต้นต้องเป็น No Duplicates 
+ซึ่งค่าเริ่มต้นต้องเป็น Allow Duplicates 
