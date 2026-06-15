@@ -9,6 +9,7 @@ import ModeSelector from './components/ModeSelector'
 import Phase2Bar from './components/Phase2Bar'
 import CustomConfig from './components/CustomConfig'
 import DrawCard from './components/DrawCard'
+import TabImage from './components/TabImage'
 import ExportCard from './components/ExportCard'
 import ErrorPopup from './components/ErrorPopup'
 
@@ -188,6 +189,10 @@ export default function App() {
           <CustomConfig config={customConfig} onChange={setCustomConfig} errors={custom.errors} />
         </div>
       )}
+
+      <div className="mt-4">
+        <TabImage modeId={activeMode} />
+      </div>
 
       <div className="mt-4">
         <DrawCard
