@@ -107,14 +107,14 @@ export default function DrawCard({
         ) : (
           <>
             <ActionButton
-              label="Draw Next Ball"
+              label="Manual Blessing"
               onClick={onDrawNext}
               disabled={nextDisabled}
               bg={theme.drawButton}
               color={theme.drawButtonText}
             />
             <ActionButton
-              label="Draw Remaining Ball"
+              label="Quick Rich"
               onClick={onDrawRemaining}
               disabled={remainingDisabled}
               bg={theme.drawButton}
