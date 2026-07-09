@@ -8,7 +8,7 @@ export const MODES = {
     id: 'megamillions',
     label: 'Mega Millions',
     white: { min: 1, max: 70, count: 5 }, // 5 ลูก จาก 1–70
-    special: { min: 1, max: 25, label: 'Mega Ball', buttonLabel: 'Draw Mega Ball' },
+    special: { min: 1, max: 24, label: 'Mega Ball', buttonLabel: 'Draw Mega Ball' },
     theme: {
       cardBg: '#1a3a6b', // deep blue
       drawButton: '#f5c518', // yellow
