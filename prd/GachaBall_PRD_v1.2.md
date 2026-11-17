@@ -5,7 +5,7 @@
 > **Changelog**
 > - v1.1 — อัปเดต Custom tab: Max default, Number of Draws field, Duplicates radio
 > - v1.2 — ย้าย Phase 2 Bar ไปใต้ Draw Card, เพิ่ม "Coming soon" overlay
-> - v1.2.1 — ปุ่มสุ่มลูกบอล (draw buttons) ทุก tab สูงขึ้น 2 เท่า จาก 50px เป็น 100px (ปุ่ม Share คงเดิม); อัปเดตชื่อปุ่มให้ตรงกับแอป: "Draw Next Ball" → "Manual Blessing", "Draw Remaining Ball" → "Quick Rich"
+> - v1.2.1 — ปุ่มสุ่มลูกบอล (draw buttons) ทุก tab สูงขึ้น 2 เท่า จาก 50px เป็น 100px (ปุ่ม Share คงเดิม); อัปเดตชื่อปุ่มให้ตรงกับแอป: "Draw Next Ball" → "Manual Blessing", "Draw Remaining Ball" → "Quick Rich"; Mega Ball ช่วงเลขเปลี่ยนจาก 1–25 เป็น 1–24
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Mega Millions**
 - White balls: 5 ลูก จากช่วง 1–70 (ไม่ซ้ำ, ไม่เรียง sort)
-- Mega Ball: 1 ลูก จากช่วง 1–25
+- Mega Ball: 1 ลูก จากช่วง 1–24
 - White balls และ Mega Ball มาจาก pool แยกกัน
 
 **Powerball**
