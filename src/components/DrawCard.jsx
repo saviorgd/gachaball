@@ -17,7 +17,7 @@ function ActionButton({ label, onClick, disabled, bg, color }) {
       disabled={disabled}
       className={baseBtn}
       style={{
-        height: 50,
+        height: 100,
         backgroundColor: bg,
         color,
         opacity: disabled ? 0.35 : 1,

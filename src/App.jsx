@@ -13,6 +13,10 @@ import TabImage from './components/TabImage'
 import ExportCard from './components/ExportCard'
 import ErrorPopup from './components/ErrorPopup'
 
+// รูปประจำ tab (public/images/{modeId}.{webp|png|jpg}) — ปิดไว้ก่อน
+// เปลี่ยนเป็น true เพื่อแสดงรูปเหนือ Draw Card อีกครั้ง
+const SHOW_TAB_IMAGE = false
+
 // อ่าน tab สุดท้ายจาก session (PRD §1.4) — ครั้งแรกสุด default = Mega Millions
 function readInitialTab() {
   try {
@@ -190,9 +194,11 @@ export default function App() {
         </div>
       )}
 
-      <div className="mt-4">
-        <TabImage modeId={activeMode} />
-      </div>
+      {SHOW_TAB_IMAGE && (
+        <div className="mt-4">
+          <TabImage modeId={activeMode} />
+        </div>
+      )}
 
       <div className="mt-4">
         <DrawCard
