@@ -1,10 +1,11 @@
 # GachaBall
 ## Product Requirements Document
-**Version 1.2 · June 2026**
+**Version 1.2.1 · November 2026**
 
 > **Changelog**
 > - v1.1 — อัปเดต Custom tab: Max default, Number of Draws field, Duplicates radio
 > - v1.2 — ย้าย Phase 2 Bar ไปใต้ Draw Card, เพิ่ม "Coming soon" overlay
+> - v1.2.1 — ปุ่มสุ่มลูกบอล (draw buttons) ทุก tab สูงขึ้น 2 เท่า จาก 50px เป็น 100px (ปุ่ม Share คงเดิม); อัปเดตชื่อปุ่มให้ตรงกับแอป: "Draw Next Ball" → "Manual Blessing", "Draw Remaining Ball" → "Quick Rich"
 
 ---
 
@@ -30,8 +31,8 @@
 - Input field มี max 28 ตัวอักษร (Min และ Max)
 
 ### 1.2 Draw Mechanic
-- ปุ่ม "Draw Next Ball" — กด 1 ครั้ง สุ่ม white balls 1 ลูก
-- ปุ่ม "Draw Remaining Ball" — กด 1 ครั้ง สุ่ม white balls ที่เหลือต่อไป ครบในครั้งเดียว ทยอยแสดงทีละลูก เว้น 1 วินาทีต่อลูก
+- ปุ่ม "Manual Blessing" — กด 1 ครั้ง สุ่ม white balls 1 ลูก
+- ปุ่ม "Quick Rich" — กด 1 ครั้ง สุ่ม white balls ที่เหลือต่อไป ครบในครั้งเดียว ทยอยแสดงทีละลูก เว้น 1 วินาทีต่อลูก
 - ปุ่ม "Draw Mega Ball" / "Draw Power Ball" — enabled เฉพาะหลัง white balls ครบแล้ว, สุ่ม 1 ลูก
 - ปุ่มแต่ละปุ่ม disabled อัตโนมัติเมื่อ pool ของตัวเองครบแล้ว
 - ปุ่ม Reset — ล้างผลทั้งหมด balls fade out แล้วเริ่มต้นใหม่
@@ -111,8 +112,8 @@
 - Drawn ball: scale-in (0.5→1.0) + fade-in, duration 300ms ease-out, stagger 1000ms ต่อลูก
 
 **Buttons (inside card):**
-- "Draw White Ball": full-width, height 50px, border-radius 12px
-- "Draw Special Ball": full-width, height 50px — disabled จนกว่า white balls ครบ
+- "Manual Blessing" / "Quick Rich": full-width, height 100px, border-radius 12px
+- "Draw Mega Ball" / "Draw Power Ball": full-width, height 100px — disabled จนกว่า white balls ครบ (ไม่มีใน Custom tab)
 - Disabled state: opacity 35%, cursor not-allowed
 - "Reset": text button, muted color, align center, ขนาดเล็ก — อยู่ใต้ draw buttons
 - "Share": โผล่แทน draw buttons เมื่อครบ, icon share + label, outlined style
